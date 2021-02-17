@@ -1,18 +1,9 @@
 import React, { useState } from "react";
 import data from "../data";
-import {
-  GridList,
-  GridListTile,
-  Paper,
-  Avatar,
-  Card,
-  Grid,
-  Typography,
-} from "@material-ui/core";
+import { Paper, Avatar, Grid, Typography } from "@material-ui/core";
 function View() {
   const [people, setPeople] = useState(data);
   console.log("People Data", people);
-  var size = 50;
   return (
     <>
       <Grid item container justify="center">
