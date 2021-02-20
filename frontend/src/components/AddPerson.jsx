@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import AddIcon from "@material-ui/icons/Add";
 import {
   Fab,
@@ -13,11 +13,14 @@ import {
   FormControl,
   FormHelperText,
   InputLabel,
+  Card,
+  CardMedia,
 } from "@material-ui/core";
 function AddPerson() {
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState({ name: "", image: "", dob: "" });
   const [error, setError] = useState(true);
+  const imageRef = useRef(null);
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -38,6 +41,7 @@ function AddPerson() {
 
     console.log(form);
   };
+
   return (
     <div>
       <Fab aria-label="Add" color="primary" onClick={handleClickOpen}>
@@ -85,6 +89,30 @@ function AddPerson() {
                     name="dob"
                   />
                 </FormControl>
+                <Button variant="contained" component="label">
+                  Upload File
+                  <input
+                    type="file"
+                    hidden
+                    ref={imageRef}
+                    onChange={(event) => {
+                      const files = event.target.files;
+                      console.log(files[0]);
+                      setForm({ ...form, ["image"]: files[0] });
+                    }}
+                  />
+                </Button>
+                {form.image && (
+                  <Card>
+                    <CardMedia
+                      component="img"
+                      alt="Contemplative Reptile"
+                      height="140"
+                      image={URL.createObjectURL(form.image)}
+                      title="Contemplative Reptile"
+                    />
+                  </Card>
+                )}
               </Grid>
             </form>
           </FormControl>

@@ -1,21 +1,19 @@
+import dotenv  # <- New
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-import os
-import dotenv # <- New
 
 # Add .env variables anywhere before SECRET_KEY
 
 dotenv_file = os.path.join(BASE_DIR, ".env")
-
 if os.path.isfile(dotenv_file):
-   
+
     dotenv.load_dotenv(dotenv_file)
 
 # Update secret key
-SECRET_KEY = os.environ['SECRET_KEY'] # Instead of your actual secret key
-
+SECRET_KEY = os.environ['SECRET_KEY']  # Instead of your actual secret key
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -127,6 +125,6 @@ REST_FRAMEWORK = {
     ]
 }
 
-MEDIA_ROOT =  os.path.join(BASE_DIR, 'media') 
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 CORS_ORIGIN_ALLOW_ALL = True
