@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-import data from "../data";
 import axios from "axios";
 import { Paper, Avatar, Grid, Typography, Fab } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
-function View() {
-  const [people, setPeople] = useState(data);
+function View({ reload }) {
+  const [people, setPeople] = useState();
   const [isFetching, setIsFetching] = useState(true);
+
   console.log("People Data", people);
   useEffect(() => {
     async function fetchData() {
@@ -18,7 +18,7 @@ function View() {
       setIsFetching(false);
     }
     fetchData();
-  }, []);
+  }, [reload]);
   return (
     <>
       {!isFetching && (
