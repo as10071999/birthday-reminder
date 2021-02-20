@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import data from "../data";
 import axios from "axios";
-import { Paper, Avatar, Grid, Typography } from "@material-ui/core";
+import { Paper, Avatar, Grid, Typography, Fab } from "@material-ui/core";
+import AddIcon from "@material-ui/icons/Add";
 function View() {
   const [people, setPeople] = useState(data);
   const [isFetching, setIsFetching] = useState(true);

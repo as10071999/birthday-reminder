@@ -9,8 +9,10 @@ function App() {
         <Grid item style={{ backgroundColor: "white" }}>
           <View />
         </Grid>
-        <Grid item style={{ backgroundColor: "blue" }}>
-          <AddPerson />
+        <Grid item style={{ backgroundColor: "white" }}>
+          <Grid container justify="center">
+            <AddPerson />
+          </Grid>
         </Grid>
       </Grid>
     </>
