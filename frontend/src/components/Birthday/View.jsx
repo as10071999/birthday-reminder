@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { AddBirthdays } from "../../actions/birthdays/birthdaysActions";
 import axios from "axios";
-import { Paper, Avatar, Grid, Typography, Fab } from "@material-ui/core";
-import AddIcon from "@material-ui/icons/Add";
-function View({ reload }) {
-  const [people, setPeople] = useState();
-  const [isFetching, setIsFetching] = useState(true);
+import { Paper, Avatar, Grid, Typography } from "@material-ui/core";
 
+function View({ reload }) {
+  // const [people, setPeople] = useState();
+  const people = useSelector((state) => state.birth);
+  const [isFetching, setIsFetching] = useState(true);
+  const dispatch = useDispatch();
   console.log("People Data", people);
+  console.log("Mounted");
   useEffect(() => {
     async function fetchData() {
       setIsFetching(true);
@@ -14,7 +18,8 @@ function View({ reload }) {
 
       const response = await axios.get(url);
       console.log(response.data);
-      setPeople([...response.data]);
+      dispatch(AddBirthdays(response.data));
+      // setPeople([...response.data]);
       setIsFetching(false);
     }
     fetchData();

@@ -5,13 +5,11 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogContentText,
   DialogTitle,
   Button,
   Grid,
   TextField,
   FormControl,
-  FormHelperText,
   InputLabel,
   Card,
   CardMedia,
@@ -49,16 +47,14 @@ function AddPerson({ setreload }) {
       formData.append("dob", form.dob);
 
       let url = `http://127.0.0.1:8000/people/add/`;
-      const resp = await axios
-        .post(url, formData)
-        .catch((err) => console.log(err));
+      await axios.post(url, formData).catch((err) => console.log(err));
       console.log("Sent Post Request");
       setreload((prev) => {
         return prev + 1;
       });
       handleClose();
     } else {
-      var Error = { submit: true, name: false, dob: false };
+      Error = { submit: true, name: false, dob: false };
       if (!form.name) {
         Error.name = true;
       }

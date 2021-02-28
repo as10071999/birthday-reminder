@@ -1,6 +1,7 @@
 import { useState } from "react";
-import AddPerson from "./components/AddPerson";
-import View from "./components/View";
+import { useHistory } from "react-router-dom";
+import View from "./components/Birthday/View";
+import AddPerson from "./components/Birthday/AddPerson";
 import {
   Grid,
   AppBar,
@@ -26,6 +27,7 @@ const useStyles = makeStyles((theme) => ({
 function App() {
   const [reload, setReload] = useState(0);
   const classes = useStyles();
+  let history = useHistory();
   return (
     <>
       <AppBar position="static">
@@ -41,7 +43,15 @@ function App() {
           <Typography variant="h6" className={classes.title}>
             Happy Birthday
           </Typography>
-          <Button color="inherit">Login</Button>
+
+          <Button
+            color="inherit"
+            onClick={() => {
+              history.push("/login");
+            }}
+          >
+            Login
+          </Button>
         </Toolbar>
       </AppBar>
       <Grid container direction="column" spacing={10} justify="center">
