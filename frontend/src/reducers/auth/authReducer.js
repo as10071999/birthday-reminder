@@ -1,20 +1,29 @@
 import * as types from "../../types/actionTypes";
 
 const initialState = {
-  authenticated: false,
-  registration_message: "",
+  token: null,
+  error: null,
+  loading: false,
 };
 
-const registration_message = "You have been registered successfully.";
+function updateObject(oldObj, updatedProperties) {
+  return { ...oldObj, ...updatedProperties };
+}
 
 function authReducer(state = initialState, action) {
   switch (action.type) {
-    case types.AUTHENTICATED:
-      return { authenticated: true, registration_message: "" };
-    case types.UNAUTHENTICATED:
-      return { authenticated: false, registration_message: "" };
-    case types.REGISTRATION_SUCCESS_MESSAGE:
-      return { ...state, registration_message: registration_message };
+    case types.AUTH_START:
+      return updateObject(state, { error: null, loading: true });
+    case types.AUTH_SUCCESS:
+      return updateObject(state, {
+        token: action.token,
+        error: null,
+        loading: false,
+      });
+    case types.AUTH_FAIL:
+      return updateObject(state, { error: action.error, loading: false });
+    case types.AUTH_LOGOUT:
+      return updateObject(state, { token: null });
     default:
       return state;
   }
