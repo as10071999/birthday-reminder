@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import View from "./View";
 import AddPerson from "./AddPerson";
@@ -28,6 +29,12 @@ function App() {
   const [reload, setReload] = useState(0);
   const classes = useStyles();
   let history = useHistory();
+
+  /* States */
+  const isAuthenticated = useSelector((state) =>
+    state.auth.token ? true : false
+  );
+  console.log("IS Authenticated", isAuthenticated);
   return (
     <>
       <AppBar position="static">
@@ -44,14 +51,18 @@ function App() {
             Happy Birthday
           </Typography>
 
-          <Button
-            color="inherit"
-            onClick={() => {
-              history.push("/login");
-            }}
-          >
-            Login
-          </Button>
+          {!isAuthenticated ? (
+            <Button
+              color="inherit"
+              onClick={() => {
+                history.push("/login");
+              }}
+            >
+              Login
+            </Button>
+          ) : (
+            <Button color="inherit">Logout</Button>
+          )}
         </Toolbar>
       </AppBar>
       <Grid container direction="column" spacing={10} justify="center">
