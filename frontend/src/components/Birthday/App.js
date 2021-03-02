@@ -2,8 +2,10 @@ import { useState, useEffect } from "react";
 import { shallowEqual, useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { authCheckState } from "../../actions/auth/authActions";
-import View from "./View";
-import AddPerson from "./AddPerson";
+import Login from "../Auth/Login";
+import Register from "../Auth/Register";
+import Home from "../Birthday/Home";
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import {
   Grid,
   AppBar,
@@ -13,7 +15,7 @@ import {
   IconButton,
   makeStyles,
 } from "@material-ui/core";
-import MenuIcon from "@material-ui/icons/Menu";
+import HomeIcon from "@material-ui/icons/Home";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -27,7 +29,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 function App() {
-  const [reload, setReload] = useState(0);
   const classes = useStyles();
   let history = useHistory();
   const dispatch = useDispatch();
@@ -51,8 +52,11 @@ function App() {
             className={classes.menuButton}
             color="inherit"
             aria-label="menu"
+            onClick={() => {
+              history.push("/");
+            }}
           >
-            <MenuIcon />
+            <HomeIcon />
           </IconButton>
           <Typography variant="h6" className={classes.title}>
             Happy Birthday
@@ -72,17 +76,11 @@ function App() {
           )}
         </Toolbar>
       </AppBar>
-      <Grid container direction="column" spacing={10} justify="center">
-        <Grid sm item></Grid>
-        <Grid item style={{ backgroundColor: "white" }}>
-          <View reload={reload} />
-        </Grid>
-        <Grid item style={{ backgroundColor: "white" }}>
-          <Grid container justify="center">
-            <AddPerson setreload={setReload} />
-          </Grid>
-        </Grid>
-      </Grid>
+      <Switch>
+        <Route exact path="/" component={Home} />
+        <Route exact path="/login" component={Login} />
+        <Route exact path="/register" component={Register} />
+      </Switch>
     </>
   );
 }
