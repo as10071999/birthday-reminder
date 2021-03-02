@@ -31,7 +31,9 @@ export default function Login() {
   let history = useHistory();
   const dispatch = useDispatch();
   const isLoading = useSelector((state) => state.auth.isLoading);
-  const error = useSelector((state) => state.auth.error);
+  const error = useSelector((state) =>
+    state.auth.error ? state.auth.error.message : null
+  );
   const [form, setForm] = useState({ username: "", password: "" });
 
   const handleInputFieldChange = (event, name) => {
@@ -40,8 +42,8 @@ export default function Login() {
   };
   function handleSubmit(event) {
     event.preventDefault();
-    console.log("Login Data:", form.username, form.password);
     dispatch(authLogin(form.username, form.password));
+    history.push("/");
   }
   return (
     <Container maxWidth="sm">
@@ -93,12 +95,7 @@ export default function Login() {
               </Grid>
             </Grid>
             <Grid container alignItems="center" justify="space-between">
-              <Grid item>
-                <FormControlLabel
-                  control={<Checkbox color="primary" />}
-                  label="Remember me"
-                />
-              </Grid>
+              <Grid item xs></Grid>
               <Grid item>
                 <Button
                   disableFocusRipple
@@ -111,25 +108,35 @@ export default function Login() {
                 </Button>
               </Grid>
             </Grid>
-            <Grid container justify="center" style={{ marginTop: "10px" }}>
-              <Button
-                variant="outlined"
-                color="primary"
-                style={{ textTransform: "none" }}
-                type="submit"
-              >
-                Login
-              </Button>
-              <Button
-                variant="outlined"
-                color="primary"
-                style={{ textTransform: "none" }}
-                onClick={() => {
-                  history.push("/register");
-                }}
-              >
-                SignUp
-              </Button>
+            <Grid
+              container
+              justify="center"
+              style={{ marginTop: "10px" }}
+              spacing={2}
+            >
+              <Grid item>
+                {" "}
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  style={{ textTransform: "none" }}
+                  type="submit"
+                >
+                  Login
+                </Button>
+              </Grid>
+              <Grid item>
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  style={{ textTransform: "none" }}
+                  onClick={() => {
+                    history.push("/register");
+                  }}
+                >
+                  SignUp
+                </Button>
+              </Grid>
             </Grid>
           </form>
         )}
