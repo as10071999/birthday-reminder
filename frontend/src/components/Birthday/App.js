@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { shallowEqual, useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { authCheckState } from "../../actions/auth/authActions";
+import { authCheckState, logout } from "../../actions/auth/authActions";
 import Login from "../Auth/Login";
 import Register from "../Auth/Register";
 import Home from "../Birthday/Home";
@@ -72,7 +72,14 @@ function App() {
               Login
             </Button>
           ) : (
-            <Button color="inherit">Logout</Button>
+            <Button
+              color="inherit"
+              onClick={() => {
+                dispatch(logout());
+              }}
+            >
+              Logout
+            </Button>
           )}
         </Toolbar>
       </AppBar>
