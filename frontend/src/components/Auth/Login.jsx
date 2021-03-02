@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { authLogin } from "../../actions/auth/authActions";
 import {
   Paper,
   withStyles,
@@ -27,11 +29,19 @@ const useStyles = makeStyles((theme) => ({
 export default function Login() {
   const classes = useStyles();
   let history = useHistory();
+  const dispatch = useDispatch();
   const isLoading = useSelector((state) => state.auth.isLoading);
   const error = useSelector((state) => state.auth.error);
+  const [form, setForm] = useState({ username: "", password: "" });
+
+  const handleInputFieldChange = (event, name) => {
+    const { target } = event;
+    setForm({ ...form, [name]: target.value });
+  };
   function handleSubmit(event) {
     event.preventDefault();
-    alert("Form Submitted");
+    console.log("Login Data:", form.username, form.password);
+    dispatch(authLogin(form.username, form.password));
   }
   return (
     <Container maxWidth="sm">
@@ -59,6 +69,9 @@ export default function Login() {
                   fullWidth
                   autoFocus
                   required
+                  onChange={(event) =>
+                    handleInputFieldChange(event, "username")
+                  }
                 />
               </Grid>
             </Grid>
@@ -73,6 +86,9 @@ export default function Login() {
                   type="password"
                   fullWidth
                   required
+                  onChange={(event) =>
+                    handleInputFieldChange(event, "password")
+                  }
                 />
               </Grid>
             </Grid>
