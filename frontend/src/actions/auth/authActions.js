@@ -1,9 +1,7 @@
 import * as types from "../../types/actionTypes";
 import axios from "axios";
 import { backendUrl } from "../backendUrl";
-import { useDispatch } from "redux";
 
-const dispatch = useDispatch();
 let url = process.env.REACT_APP_DEV_URL || backendUrl;
 
 function authStart() {
@@ -17,14 +15,35 @@ function authSuccess(token) {
 function authFail(error) {
   return { type: types.AUTH_FAIL, error: error };
 }
+
 function checkAuthTimeout(expirationTime) {
-  return () => {
+  return (dispatch) => {
     setTimeout(() => {
       dispatch(logout());
     }, expirationTime * 1000);
   };
 }
 
+function authCheckState() {
+  return (dispatch) => {
+    const token = localStorage.getItem("token");
+    if (token === undefined) {
+      dispatch(logout());
+    } else {
+      const expirationDate = new Date(localStorage.getItem("expirationDate"));
+      if (expirationDate <= new Date()) {
+        dispatch(logout());
+      } else {
+        dispatch(authSuccess);
+        dispatch(
+          checkAuthTimeout(
+            (expirationDate.getTime() - new Date.getItem()) / 1000
+          )
+        );
+      }
+    }
+  };
+}
 function logout() {
   localStorage.removeItem("token");
   localStorage.removeItem("expirationDate");
@@ -32,7 +51,7 @@ function logout() {
 }
 
 function authLogin(username, password) {
-  return () => {
+  return (dispatch) => {
     dispatch(authStart());
     axios
       .post(`${url}/rest-auth/login`, {
@@ -53,7 +72,7 @@ function authLogin(username, password) {
   };
 }
 function authSignUp(username, email, password1, password2) {
-  return () => {
+  return (dispatch) => {
     dispatch(authStart());
     axios
       .post(`${url}/rest-auth/registration`, {
@@ -83,4 +102,5 @@ export {
   authSuccess,
   logout,
   checkAuthTimeout,
+  authCheckState,
 };

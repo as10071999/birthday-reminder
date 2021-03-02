@@ -1,6 +1,7 @@
-import { useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useState, useEffect } from "react";
+import { shallowEqual, useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
+import { authCheckState } from "../../actions/auth/authActions";
 import View from "./View";
 import AddPerson from "./AddPerson";
 import {
@@ -29,12 +30,18 @@ function App() {
   const [reload, setReload] = useState(0);
   const classes = useStyles();
   let history = useHistory();
+  const dispatch = useDispatch();
 
   /* States */
-  const isAuthenticated = useSelector((state) =>
-    state.auth.token ? true : false
-  );
+  const isAuthenticated = useSelector((state) => {
+    return state.auth.token ? true : false;
+  }, shallowEqual);
   console.log("IS Authenticated", isAuthenticated);
+
+  /* UseEffect */
+  useEffect(() => {
+    dispatch(authCheckState());
+  });
   return (
     <>
       <AppBar position="static">
