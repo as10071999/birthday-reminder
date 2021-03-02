@@ -125,10 +125,11 @@ export default function Login() {
                   Login
                 </Button>
               </Grid>
+
               <Grid item>
+                or
                 <Button
-                  variant="outlined"
-                  color="primary"
+                  color="secondary"
                   style={{ textTransform: "none" }}
                   onClick={() => {
                     history.push("/register");

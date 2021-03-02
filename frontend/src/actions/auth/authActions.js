@@ -71,15 +71,14 @@ function authLogin(username, password) {
       });
   };
 }
-function authSignUp(username, email, password1, password2) {
+function authSignUp(username, email, password) {
   return (dispatch) => {
     dispatch(authStart());
     axios
       .post(`${url}/rest-auth/registration`, {
         username: username,
         email: email,
-        password1: password1,
-        password2: password2,
+        password: password,
       })
       .then((res) => {
         const token = res.data.key;
