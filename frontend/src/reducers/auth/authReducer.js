@@ -14,6 +14,8 @@ function authReducer(state = initialState, action) {
   switch (action.type) {
     case types.AUTH_START:
       return updateObject(state, { error: null, loading: true });
+    case types.AUTH_CHECK_STATE:
+      return state;
     case types.AUTH_SUCCESS:
       return updateObject(state, {
         token: action.token,

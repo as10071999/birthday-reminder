@@ -7,7 +7,6 @@ import Register from "../Auth/Register";
 import Home from "../Birthday/Home";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import {
-  Grid,
   AppBar,
   Toolbar,
   Typography,
@@ -41,7 +40,9 @@ function App() {
 
   /* UseEffect */
   useEffect(() => {
+    console.log("Checking Auth State From App");
     dispatch(authCheckState());
+    console.log("Dispatched From App");
   });
   return (
     <>

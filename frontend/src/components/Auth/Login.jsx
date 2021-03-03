@@ -1,14 +1,11 @@
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector, shallowEqual } from "react-redux";
 import { authLogin } from "../../actions/auth/authActions";
 import {
   Paper,
-  withStyles,
   Grid,
   TextField,
   Button,
-  FormControlLabel,
-  Checkbox,
   makeStyles,
   Container,
   CircularProgress,
@@ -16,7 +13,6 @@ import {
 import Alert from "@material-ui/lab/Alert";
 import { Face, Fingerprint } from "@material-ui/icons";
 import { useHistory } from "react-router-dom";
-import { useSelector } from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
   margin: {
@@ -31,9 +27,25 @@ export default function Login() {
   let history = useHistory();
   const dispatch = useDispatch();
   const isLoading = useSelector((state) => state.auth.isLoading);
-  const error = useSelector((state) =>
-    state.auth.error ? state.auth.error.message : null
-  );
+  const error = useSelector((state) => {
+    if (state.auth.error) {
+      if (
+        state.auth.error.errorStatus &&
+        state.auth.error.errorStatus[1] === 400
+      ) {
+        return `${
+          state.auth.error.errorStatus[0].non_field_errors
+            ? state.auth.error.errorStatus[0].non_field_errors
+            : ""
+        }`;
+      } else {
+        return state.auth.error.wrongRequest;
+      }
+    }
+  });
+  const isAuthenticated = useSelector((state) => {
+    return state.auth.token ? true : false;
+  }, shallowEqual);
   const [form, setForm] = useState({ username: "", password: "" });
 
   const handleInputFieldChange = (event, name) => {
@@ -43,8 +55,12 @@ export default function Login() {
   function handleSubmit(event) {
     event.preventDefault();
     dispatch(authLogin(form.username, form.password));
-    history.push("/");
   }
+  useEffect(() => {
+    if (isAuthenticated) {
+      history.push("/");
+    }
+  }, [isAuthenticated]);
   return (
     <Container maxWidth="sm">
       <Paper className={classes.padding}>

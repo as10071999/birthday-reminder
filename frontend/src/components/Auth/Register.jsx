@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector, shallowEqual } from "react-redux";
 import { authSignUp } from "../../actions/auth/authActions";
 import { useHistory } from "react-router-dom";
 
@@ -16,7 +16,7 @@ import {
   InputAdornment,
   Input,
 } from "@material-ui/core";
-
+import Alert from "@material-ui/lab/Alert";
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import { Face, Fingerprint } from "@material-ui/icons";
@@ -35,6 +35,9 @@ export default function Register() {
   const dispatch = useDispatch();
   const history = useHistory();
   const classes = useStyles();
+  const isAuthenticated = useSelector((state) => {
+    return state.auth.token ? true : false;
+  }, shallowEqual);
   const [form, setForm] = useState({
     username: "",
     email: "",
@@ -52,6 +55,37 @@ export default function Register() {
     emailMsg: "",
     passwordMsg: "",
     passwordConfirmMsg: "",
+  });
+  const errorMSG = useSelector((state) => {
+    if (state.auth.error) {
+      if (
+        state.auth.error.errorStatus &&
+        state.auth.error.errorStatus[1] === 400
+      ) {
+        return `${
+          state.auth.error.errorStatus[0].username
+            ? state.auth.error.errorStatus[0].username
+            : ""
+        } 
+         ${
+           state.auth.error.errorStatus[0].email
+             ? state.auth.error.errorStatus[0].email
+             : ""
+         }
+       ${
+         state.auth.error.errorStatus[0].password1
+           ? state.auth.error.errorStatus[0].password1
+           : ""
+       }
+         ${
+           state.auth.error.errorStatus[0].password2
+             ? state.auth.error.errorStatus[0].password2
+             : ""
+         }`;
+      } else {
+        return state.auth.error.wrongRequest;
+      }
+    }
   });
   console.log("Form Data", form);
 
@@ -90,6 +124,23 @@ export default function Register() {
       error.email = true;
       error.emailMsg = "Email is required";
       errorFound = true;
+    } else {
+      function ValidateEmail(mail) {
+        if (
+          /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(
+            mail
+          )
+        ) {
+          return true;
+        }
+        //  alert("You have entered an invalid email address!");
+        return false;
+      }
+      if (!ValidateEmail(form.email)) {
+        error.email = true;
+        error.emailMsg = "Email is not valid";
+        errorFound = true;
+      }
     }
     if (!form.password) {
       error.password = true;
@@ -110,12 +161,26 @@ export default function Register() {
     }
     setError({ ...error });
     if (!errorFound) {
-      dispatch(authSignUp(form.username, form.email, form.password));
+      dispatch(
+        authSignUp(
+          form.username,
+          form.email,
+          form.password,
+          form.passwordConfirm
+        )
+      );
     }
     console.log("Dispatched");
   };
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      history.push("/");
+    }
+  }, [isAuthenticated]);
   return (
     <Container maxWidth="sm">
+      {errorMSG && <Alert severity="error">{errorMSG}</Alert>}
       <Paper className={classes.padding}>
         <form className={classes.margin}>
           <Grid container spacing={8} alignItems="flex-end">

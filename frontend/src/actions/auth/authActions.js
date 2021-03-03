@@ -26,6 +26,7 @@ function checkAuthTimeout(expirationTime) {
 
 function authCheckState() {
   return (dispatch) => {
+    dispatch({ type: types.AUTH_CHECK_STATE });
     const token = localStorage.getItem("token");
     if (token === undefined) {
       dispatch(logout());
@@ -37,7 +38,7 @@ function authCheckState() {
         dispatch(authSuccess);
         dispatch(
           checkAuthTimeout(
-            (expirationDate.getTime() - new Date.getItem()) / 1000
+            (expirationDate.getTime() - new Date().getTime()) / 1000
           )
         );
       }
@@ -54,7 +55,7 @@ function authLogin(username, password) {
   return (dispatch) => {
     dispatch(authStart());
     axios
-      .post(`${url}/rest-auth/login`, {
+      .post(`${url}/rest-auth/login/`, {
         username: username,
         password: password,
       })
@@ -67,18 +68,31 @@ function authLogin(username, password) {
         dispatch(checkAuthTimeout(3600));
       })
       .catch((error) => {
-        dispatch(authFail(error));
+        dispatch(
+          authFail({
+            wrongRequest: error.message,
+            badNetwork: error.request,
+            errorStatus: error.response
+              ? [
+                  error.response.data,
+                  error.response.status,
+                  error.response.headers,
+                ]
+              : [],
+          })
+        );
       });
   };
 }
-function authSignUp(username, email, password) {
+function authSignUp(username, email, password1, password2) {
   return (dispatch) => {
     dispatch(authStart());
     axios
-      .post(`${url}/rest-auth/registration`, {
+      .post(`${url}/rest-auth/registration/`, {
         username: username,
         email: email,
-        password: password,
+        password1: password1,
+        password2: password2,
       })
       .then((res) => {
         const token = res.data.key;
@@ -89,7 +103,19 @@ function authSignUp(username, email, password) {
         dispatch(checkAuthTimeout(3600));
       })
       .catch((error) => {
-        dispatch(authFail(error));
+        dispatch(
+          authFail({
+            wrongRequest: error.message,
+            badNetwork: error.request,
+            errorStatus: error.response
+              ? [
+                  error.response.data,
+                  error.response.status,
+                  error.response.headers,
+                ]
+              : [],
+          })
+        );
       });
   };
 }

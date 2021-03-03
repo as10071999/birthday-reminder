@@ -1,18 +1,18 @@
 import { useState, useEffect } from "react";
+import { authCheckState } from "../../actions/auth/authActions";
+import { useDispatch } from "react-redux";
 import View from "./View";
 import AddPerson from "./AddPerson";
-import {
-  Grid,
-  AppBar,
-  Toolbar,
-  Typography,
-  Button,
-  IconButton,
-  makeStyles,
-} from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 
 export default function Home() {
   const [reload, setReload] = useState(0);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    console.log("Checking Auth State");
+    // dispatch(authCheckState());
+    console.log("Dispatched");
+  });
   return (
     <div>
       <Grid container direction="column" spacing={10} justify="center">
