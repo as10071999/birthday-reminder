@@ -36,7 +36,7 @@ function App() {
   const isAuthenticated = useSelector((state) => {
     return state.auth.token ? true : false;
   }, shallowEqual);
-  console.log("IS Authenticated", isAuthenticated);
+  //console.log("IS Authenticated", isAuthenticated);
 
   /* UseEffect */
   useEffect(() => {

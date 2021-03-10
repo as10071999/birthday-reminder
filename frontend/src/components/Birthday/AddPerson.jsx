@@ -48,7 +48,7 @@ function AddPerson({ setreload }) {
 
       let url = `http://127.0.0.1:8000/people/add/`;
       await axios.post(url, formData).catch((err) => console.log(err));
-      console.log("Sent Post Request");
+      //console.log("Sent Post Request");
       setreload((prev) => {
         return prev + 1;
       });
@@ -66,7 +66,7 @@ function AddPerson({ setreload }) {
       }
       setError({ ...Error });
     }
-    console.log(form);
+    //console.log(form);
   };
 
   return (
@@ -132,7 +132,7 @@ function AddPerson({ setreload }) {
                         hidden
                         onChange={(event) => {
                           const files = event.target.files;
-                          console.log(files[0]);
+                          //console.log(files[0]);
                           setForm({ ...form, ["image"]: files[0] });
                         }}
                       />

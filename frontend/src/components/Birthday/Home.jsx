@@ -9,9 +9,9 @@ export default function Home() {
   const [reload, setReload] = useState(0);
   const dispatch = useDispatch();
   useEffect(() => {
-    console.log("Checking Auth State");
+    //console.log("Checking Auth State");
     // dispatch(authCheckState());
-    console.log("Dispatched");
+    //console.log("Dispatched");
   });
   return (
     <div>

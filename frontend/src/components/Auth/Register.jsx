@@ -87,7 +87,7 @@ export default function Register() {
       }
     }
   });
-  console.log("Form Data", form);
+  //console.log("Form Data", form);
 
   const handleClickShowPassword = () => {
     setForm({ ...form, showPassword: !form.showPassword });
@@ -103,7 +103,7 @@ export default function Register() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Submitted");
+    //console.log("Submitted");
     let errorFound = false;
     let error = {
       username: false,
@@ -170,7 +170,7 @@ export default function Register() {
         )
       );
     }
-    console.log("Dispatched");
+    //console.log("Dispatched");
   };
 
   useEffect(() => {

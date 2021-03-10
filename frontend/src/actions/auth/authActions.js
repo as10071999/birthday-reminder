@@ -4,30 +4,31 @@ import { backendUrl } from "../backendUrl";
 
 let url = process.env.REACT_APP_DEV_URL || backendUrl;
 
-function authStart() {
+export const authStart = () => {
   return { type: types.AUTH_START };
-}
+};
 
-function authSuccess(token) {
+export const authSuccess = (token) => {
   return { type: types.AUTH_SUCCESS, token: token };
-}
+};
 
-function authFail(error) {
+export const authFail = (error) => {
   return { type: types.AUTH_FAIL, error: error };
-}
+};
 
-function checkAuthTimeout(expirationTime) {
+export const checkAuthTimeout = (expirationTime) => {
   return (dispatch) => {
     setTimeout(() => {
       dispatch(logout());
     }, expirationTime * 1000);
   };
-}
+};
 
-function authCheckState() {
+export const authCheckState = () => {
   return (dispatch) => {
     dispatch({ type: types.AUTH_CHECK_STATE });
-    const token = localStorage.getItem("token");
+    let token = localStorage.token;
+    console.log("Token:", token);
     if (token === undefined) {
       dispatch(logout());
     } else {
@@ -35,7 +36,7 @@ function authCheckState() {
       if (expirationDate <= new Date()) {
         dispatch(logout());
       } else {
-        dispatch(authSuccess);
+        dispatch(authSuccess(token));
         dispatch(
           checkAuthTimeout(
             (expirationDate.getTime() - new Date().getTime()) / 1000
@@ -44,14 +45,14 @@ function authCheckState() {
       }
     }
   };
-}
-function logout() {
+};
+export const logout = () => {
   localStorage.removeItem("token");
   localStorage.removeItem("expirationDate");
   return { type: types.AUTH_LOGOUT };
-}
+};
 
-function authLogin(username, password) {
+export const authLogin = (username, password) => {
   return (dispatch) => {
     dispatch(authStart());
     axios
@@ -83,8 +84,8 @@ function authLogin(username, password) {
         );
       });
   };
-}
-function authSignUp(username, email, password1, password2) {
+};
+export const authSignUp = (username, email, password1, password2) => {
   return (dispatch) => {
     dispatch(authStart());
     axios
@@ -118,14 +119,4 @@ function authSignUp(username, email, password1, password2) {
         );
       });
   };
-}
-export {
-  authFail,
-  authLogin,
-  authSignUp,
-  authStart,
-  authSuccess,
-  logout,
-  checkAuthTimeout,
-  authCheckState,
 };
