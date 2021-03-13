@@ -10,14 +10,14 @@ function View({ reload }) {
   const [isFetching, setIsFetching] = useState(true);
   const dispatch = useDispatch();
   console.log("People Data", people);
-  console.log("Mounted");
+  // console.log("Mounted");
   useEffect(() => {
     async function fetchData() {
       setIsFetching(true);
       let url = "http://127.0.0.1:8000/people/";
 
       const response = await axios.get(url);
-      console.log(response.data);
+      // console.log(response.data);
       dispatch(AddBirthdays(response.data));
       // setPeople([...response.data]);
       setIsFetching(false);

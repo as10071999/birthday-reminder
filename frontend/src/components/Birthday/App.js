@@ -15,7 +15,8 @@ import {
   makeStyles,
 } from "@material-ui/core";
 import HomeIcon from "@material-ui/icons/Home";
-
+import { backendUrl } from "../../actions/backendUrl";
+import axios from "axios";
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -31,7 +32,7 @@ function App() {
   const classes = useStyles();
   let history = useHistory();
   const dispatch = useDispatch();
-
+  const token = useSelector((state) => state.auth.token);
   /* States */
   const isAuthenticated = useSelector((state) => {
     return state.auth.token ? true : false;
@@ -40,9 +41,19 @@ function App() {
 
   /* UseEffect */
   useEffect(() => {
-    console.log("Checking Auth State From App");
+    // console.log("Checking Auth State From App");
     dispatch(authCheckState());
-    console.log("Dispatched From App");
+    async function fetchMyAPI() {
+      let url = `${backendUrl}/rest-auth/user/`;
+      console.log("Token", token);
+      let response = await axios.get(url, {
+        headers: { Authorization: "Token " + token },
+      });
+
+      console.log("User Data", response.data);
+    }
+    if (token) fetchMyAPI();
+    // console.log("Dispatched From App");
   });
   return (
     <>

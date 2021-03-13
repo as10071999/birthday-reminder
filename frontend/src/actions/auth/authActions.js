@@ -28,7 +28,7 @@ export const authCheckState = () => {
   return (dispatch) => {
     dispatch({ type: types.AUTH_CHECK_STATE });
     let token = localStorage.token;
-    console.log("Token:", token);
+    // console.log("Token:", token);
     if (token === undefined) {
       dispatch(logout());
     } else {

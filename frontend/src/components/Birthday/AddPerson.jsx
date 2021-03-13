@@ -24,7 +24,7 @@ function AddPerson({ setreload }) {
     name: false,
     dob: false,
   });
-  console.log(error);
+  // console.log(error);
   const handleClickOpen = () => {
     setOpen(true);
   };
